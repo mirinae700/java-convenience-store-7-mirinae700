@@ -212,8 +212,14 @@ public class Order {
                     }
 
                     if (product.getQuantity() < purchaseCount) {
-                        promotionCount = product.getQuantity() / (promotion.getBuy() + promotion.getGet());
+                        if (product.getQuantity() != 1) {
+                            promotionCount = product.getQuantity() / (promotion.getBuy() + promotion.getGet());
+                        }
                         int nonAppliedCount = purchaseData.get(key) - (promotionCount + (promotionCount * promotion.getBuy()));
+                        if (product.getQuantity() == 1) {
+                            nonAppliedCount = purchaseData.get(key) - promotionCount;
+                            promotionCount = 0;
+                        }
                         String promoAnswer = notifyPromotionNotApplied(key, nonAppliedCount); // 프로모션 할인 미적용 개수 안내
                         if (promoAnswer.equals("N")) {
                             int count = purchaseData.get(key) - nonAppliedCount;
